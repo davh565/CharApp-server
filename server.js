@@ -1,54 +1,59 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var mongoose = require('mongoose');
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const mongoose = require('mongoose');
+const templatePathfinder = require('./templates/pathfinder')
 
 //Mongoose
 mongoose.connect(
     "mongodb://davh:briadir32dh!@CGTest-shard-00-00-h0zai.mongodb.net:27017,cgtest-shard-00-01-h0zai.mongodb.net:27017,cgtest-shard-00-02-h0zai.mongodb.net:27017/CGTest?ssl=true&replicaSet=CGTest-shard-0&authSource=admin&retryWrites=true"
 );
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
     console.log("DB connected")
 });
 
-var msgSchema = new mongoose.Schema({
-    message: String
-});
-var Message = mongoose.model('Message',msgSchema);
-
+const schemaPathfinder = new mongoose.Schema(templatePathfinder.characteristics)
+const Character = mongoose.model('Character',schemaPathfinder);
+// console.log(schemaPathfinder)
 //Socket IO
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
 io
-    .of("/characters")
     .on('connection',function(socket){
     console.log(socket.id + ' connected');
     socket.on('disconnect', function(){
         console.log(socket.id + ' disconnected');
     });
-    Message.find(function(err,messages){
-        if(err) return console.log('Retrieval Error!');
-        for(const message of messages){
-            io.emit('chat message', message);
-        }
-    })
-    socket.on('chat message', function(msg){
-        var message = new Message({
-            message: msg
+    // Character.find(function(err,messages){
+    //     if(err) return console.log('Retrieval Error!');
+    //     for(const message of messages){
+    //         io.emit('addCharacter', message);
+    //     }
+    // })
+    socket.on('addCharacter', function(charInfo){
+        const newChar = new Character({
+            characterName: charInfo.name,
+            campaign: charInfo.campaign,
+            ruleset: charInfo.ruleset,
         })
-        console.log(message)
-        message.save(function(err, message){
+        // console.log(newChar)
+        newChar.save(function(err){
             if(err){
                 console.log('Save Error!');
             }
+            else{
+            }
         })
-        io.emit('chat message', message);
-        console.log('message: ' + msg);
+        socket.emit('addedChar', newChar._id)
+        // io.emit('addedChar',newChar._id);
+        console.log(charInfo.name);
+        console.log(charInfo.ruleset);
+        console.log(charInfo.campaign);
     });
 });
 

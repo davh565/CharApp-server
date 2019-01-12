@@ -1,4 +1,4 @@
-const characteristics = {
+exports.characteristics = {
     ac: {
       total: 'Number',
       armor: 'Number',
@@ -14,6 +14,7 @@ const characteristics = {
     },
     age: 'Number',
     alignment: 'String',
+    campaign: 'String',
     characterName: 'String',
     'class': 'String',
     combat: {
@@ -121,6 +122,7 @@ const characteristics = {
     },
     playerName: 'String',
     race: 'String',
+    ruleset: 'String',
     saves: {
       fort: {
         total: 'Number',
@@ -202,5 +204,3 @@ const characteristics = {
     },
     weight: 'Number'
   }
-
-export { characteristics }
