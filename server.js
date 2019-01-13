@@ -40,6 +40,10 @@ io
             Character.find(emitChars)
             // console.log( getCharacter)
         })
+        socket.on('delCharacter',function(id){
+            Character.findByIdAndRemove(id).exec
+             console.log( 'delete '+id)
+        })
         
         socket.on('addCharacter', function(charInfo){
             const newChar = new Character({
@@ -59,9 +63,9 @@ io
         Character.find(emitChars)
         // getCharacter
         // io.emit('addedChar',newChar._id);
-        console.log(charInfo.name);
-        console.log(charInfo.ruleset);
-        console.log(charInfo.campaign);
+        // console.log(charInfo.name);
+        // console.log(charInfo.ruleset);
+        // console.log(charInfo.campaign);
     });
 });
 
