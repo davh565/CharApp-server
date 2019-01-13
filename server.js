@@ -41,8 +41,12 @@ io
             // console.log( getCharacter)
         })
         socket.on('delCharacter',function(id){
-            Character.findByIdAndRemove(id).exec
-             console.log( 'delete '+id)
+            Character.findByIdAndDelete(id,function(err){
+                if(err){
+                console.log('Delete Error!');
+            }})
+            Character.find(emitChars)
+            //  console.log( 'delete '+id)
         })
         
         socket.on('addCharacter', function(charInfo){
