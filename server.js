@@ -25,19 +25,25 @@ app.get('/', function(req, res){
 
 io
     .on('connection',function(socket){
-    console.log(socket.id + ' connected');
-    socket.on('disconnect', function(){
-        console.log(socket.id + ' disconnected');
-    });
-    // Character.find(function(err,messages){
-    //     if(err) return console.log('Retrieval Error!');
-    //     for(const message of messages){
-    //         io.emit('addCharacter', message);
-    //     }
-    // })
-    socket.on('addCharacter', function(charInfo){
-        const newChar = new Character({
-            characterName: charInfo.name,
+
+        function emitChars(err, chars){
+            if (err) return handleError(err);
+            io.emit('getChars',chars)
+            // console.log(chars);
+        }
+        // console.log(getCharacter)
+        console.log(socket.id + ' connected');
+        socket.on('disconnect', function(){
+            console.log(socket.id + ' disconnected');
+        });
+        socket.on('reqCharacters',function(query){
+            Character.find(emitChars)
+            // console.log( getCharacter)
+        })
+        
+        socket.on('addCharacter', function(charInfo){
+            const newChar = new Character({
+                characterName: charInfo.name,
             campaign: charInfo.campaign,
             ruleset: charInfo.ruleset,
         })
@@ -50,6 +56,8 @@ io
             }
         })
         socket.emit('addedChar', newChar._id)
+        Character.find(emitChars)
+        // getCharacter
         // io.emit('addedChar',newChar._id);
         console.log(charInfo.name);
         console.log(charInfo.ruleset);
