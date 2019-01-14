@@ -48,6 +48,14 @@ io
             Character.find(emitChars)
             //  console.log( 'delete '+id)
         })
+        socket.on('editCharacter',function(data){
+            Character.findByIdAndUpdate(data.id,data.obj,function(err){
+                if(err){
+                console.log('Update Error!');
+            }})
+            Character.find(emitChars)
+            //  console.log( 'delete '+id)
+        })
         
         socket.on('addCharacter', function(charInfo){
             const newChar = new Character({

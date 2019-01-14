@@ -1,206 +1,241 @@
 exports.characteristics = {
-    ac: {
-      total: 'Number',
-      armor: 'Number',
-      shield: 'Number',
-      dex: 'Number',
-      size: 'Number',
-      deflect: 'Number',
-      dodge: 'Number',
-      natural: 'Number',
-      misc: 'Number',
-      touch: 'Number',
-      flatFooted: 'Number'
-    },
-    age: 'Number',
-    alignment: 'String',
-    campaign: 'String',
-    characterName: 'String',
-    'class': 'String',
-    combat: {
-      bab: 'Number',
-      melee: {
-        attack1: 'Number',
-        attack2: 'Number',
-        attack3: 'Number',
-        attack4: 'Number',
-        stat: 'Number',
-        size: 'Number',
-        misc: 'Number'
+
+  ac: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 10,
+        armor: 0,
+        shield: 0,
+        dex: 0,
+        size: 0,
+        deflect: 0,
+        dodge: 0,
+        natural: 0,
+        misc: 0,
+        touch: 0,
+        flatFooted: 0,
       },
-      ranged: {
-        attack1: 'Number',
-        attack2: 'Number',
-        attack3: 'Number',
-        attack4: 'Number',
-        stat: 'Number',
-        size: 'Number',
-        misc: 'Number'
-      }
     },
-    concentration: 'Number',
-    diety: 'String',
-    dr: 'Number',
-    eyes: 'String',
-    gender: 'String',
-    hair: 'String',
-    height: 'String',
-    homeland: 'String',
-    hp: {
-      max: 'Number',
-      wounds: 'Number',
-      temp: 'Number',
-      nonLethal: 'Number'
-    },
-    initiative: {
-      total: 'Number',
-      dex: 'Number',
-      misc: 'Number'
-    },
-    level: 'Number',
-    maneuvers: {
-      cmb: {
-        total: 'Number',
-        stat: 'Number',
-        bab: 'Number',
-        misc: 'Number',
-        size: 'Number',
-        temp: 'Number'
+  combat: {
+    bab: { type: Number, default: 0 },
+    melee: {
+      type: Map,
+      of: Number,
+      default: {
+        attack: 0,
+        stat: 0,
+        size: 0,
+        misc: 0,
       },
-      cmd: {
-        total: 'Number',
-        stat: 'Number',
-        bab: 'Number',
-        misc: 'Number',
-        size: 'Number',
-        temp: 'Number'
-      }
     },
-    misc: {
-      name: [
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String'
-      ],
-      value: [
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String'
-      ]
+    ranged: {
+      type: Map,
+      of: Number,
+      default: {
+        attack: 0,
+        stat: 0,
+        size: 0,
+        misc: 0,
+      },
     },
-    money: {
-      name: [
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String'
-      ],
-      value: [
-        'String',
-        'String',
-        'String',
-        'String',
-        'String',
-        'String'
-      ]
+
+  },
+  hp: {
+    type: Map,
+    of: Number,
+    default: {
+      max: 0,
+      wounds: 0,
+      temp: 0,
+      nonLethal: 0,
     },
-    playerName: 'String',
-    race: 'String',
-    ruleset: 'String',
-    saves: {
-      fort: {
-        total: 'Number',
-        stat: 'Number',
-        base: 'Number',
-        magic: 'Number',
-        misc: 'Number',
-        temp: 'Number'
-      },
-      ref: {
-        total: 'Number',
-        stat: 'Number',
-        base: 'Number',
-        magic: 'Number',
-        misc: 'Number',
-        temp: 'Number'
-      },
-      will: {
-        total: 'Number',
-        magic: 'Number',
-        stat: 'Number',
-        base: 'Number',
-        misc: 'Number',
-        temp: 'Number'
-      }
+  },
+  initiative: {
+    type: Map,
+    of: Number,
+    default: {
+      total: 0,
+      dex: 0,
+      misc: 0,
     },
-    size: {
-      category: 'String',
-      modifier: 'Number'
+  },
+  classLevel: {
+    totalLevel: { type: Number, default: 1},
+    class: {
+      type: Map,
+      of: Number,
+      default: {
+        fighter: 1,
+      },
     },
-    speed: {
-      total: 'Number',
-      land: 'Number',
-      misc: 'Number',
-      fly: 'Number',
-      flyManeuverability: 'String',
-      swim: 'Number',
-      climb: 'Number',
-      burrow: 'Number'
+  },
+  maneuvers: {
+    cmb: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 0,
+        stat: 0,
+        bab: 0,
+        size: 0,
+        misc: 0,
+        temp: 0,
+      },
     },
-    sr: 'Number',
-    stats: {
-      str: {
-        total: 'Number',
-        modifier: 'Number',
-        base: 'Number',
-        misc: 'Number'
+    cmd: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 0,
+        stat: 0,
+        bab: 0,
+        size: 0,
+        misc: 0,
+        temp: 0,
       },
-      dex: {
-        total: 'Number',
-        modifier: 'Number',
-        base: 'Number',
-        misc: 'Number'
-      },
-      con: {
-        total: 'Number',
-        modifier: 'Number',
-        base: 'Number',
-        misc: 'Number'
-      },
-      'int': {
-        total: 'Number',
-        modifier: 'Number',
-        base: 'Number',
-        misc: 'Number'
-      },
-      wis: {
-        total: 'Number',
-        modifier: 'Number',
-        base: 'Number',
-        misc: 'Number'
-      },
-      cha: {
-        total: 'Number',
-        modifier: 'Number',
-        base: 'Number',
-        misc: 'Number'
-      }
     },
-    weight: 'Number'
+  },
+  saves: {
+    fort: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 0,
+        stat: 0,
+        base: 0,
+        magic: 0,
+        misc: 0,
+        temp: 0,
+      },
+    },
+    ref: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 0,
+        stat: 0,
+        base: 0,
+        magic: 0,
+        misc: 0,
+        temp: 0,
+      },
+    },
+    will: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 0,
+        stat: 0,
+        base: 0,
+        magic: 0,
+        misc: 0,
+        temp: 0,
+      },
+    },
+  },
+  size: {
+    category: { type: String, default: 'Medium' },
+    modifier: { type: Number, default: 0 }
+  },
+  speed: {
+    type: Map,
+    of: Number,
+    default: {
+      land: 0,
+      fly: 0,
+      swim: 0,
+      climb: 0,
+      burrow: 0,
+      misc: 0,
+      temp: 0,
+    },
+  },
+  stats: {
+    str: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 10,
+        modifier: 0,
+        base: 0,
+        misc: 0,
+        temp: 0,
+      },
+    },
+    dex: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 10,
+        modifier: 0,
+        base: 0,
+        misc: 0,
+        temp: 0,
+      },
+    },
+    con: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 10,
+        modifier: 0,
+        base: 0,
+        misc: 0,
+        temp: 0,
+      },
+    },
+    int: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 10,
+        modifier: 0,
+        base: 0,
+        misc: 0,
+        temp: 0,
+      },
+    },
+    wis: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 10,
+        modifier: 0,
+        base: 0,
+        misc: 0,
+        temp: 0,
+      },
+    },
+    cha: {
+      type: Map,
+      of: Number,
+      default: {
+        total: 10,
+        modifier: 0,
+        base: 0,
+        misc: 0,
+        temp: 0,
+      },
+    },
+  },
+  
+  age: { type: Number, default: 10 },
+  alignment: { type: String, default: '' },
+  campaign: { type: String, default: '' },
+  characterName: { type: String, default: '' },
+  concentration: { type: Number, default: 10 },
+  diety: { type: String, default: '' },
+  dr: { type: Number, default: 10 },
+  eyes: { type: String, default: '' },
+  gender: { type: String, default: '' },
+  hair: { type: String, default: '' },
+  height: { type: String, default: '' },
+  homeland: { type: String, default: '' },
+  playerName: { type: String, default: 'Dave' },
+  race: { type: String, default: '' },
+  ruleset: { type: String, default: '' },
+  sr: { type: Number, default: 10 },
+  weight: { type: Number, default: 10 },
+
   }
