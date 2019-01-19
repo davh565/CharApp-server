@@ -15,7 +15,7 @@ db.once('open', function() {
     console.log("DB connected")
 });
 
-const schemaPathfinder = new mongoose.Schema(templatePathfinder.characteristics)
+const schemaPathfinder = new mongoose.Schema({ data: {} })
 const Character = mongoose.model('Character',schemaPathfinder);
 // console.log(schemaPathfinder)
 //Socket IO
@@ -48,8 +48,17 @@ io
             Character.find(emitChars)
             //  console.log( 'delete '+id)
         })
-        socket.on('editCharacter',function(data){
-            Character.findByIdAndUpdate(data.id,data.obj,function(err){
+        socket.on('editCharacter',function(info){
+            Character.findById(info.id,function(err,doc){
+                for ( property in info.obj ) {
+                    // console.log( property ); // Outputs: foo, fiz or fiz, foo
+                    doc.data[property]=info.obj[property]
+                    console.log(doc.data[property])
+}
+                console.log(doc)
+                doc.markModified('data')
+                doc.save()
+
                 if(err){
                 console.log('Update Error!');
             }})
@@ -59,10 +68,17 @@ io
         
         socket.on('addCharacter', function(charInfo){
             const newChar = new Character({
+                data: {
                 characterName: charInfo.name,
             campaign: charInfo.campaign,
             ruleset: charInfo.ruleset,
-        })
+            str: {
+                total: 15,
+                modifier: 1,
+                temp: 2
+            }
+        }
+    })
         // console.log(newChar)
         newChar.save(function(err){
             if(err){
