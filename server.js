@@ -5,6 +5,23 @@ const mongoose = require('mongoose');
 const templatePathfinder = require('./templates/pathfinder')
 
 //Mongoose
+
+function NumberOrString(key, options){
+    mongoose.SchemaType.call(this, key, options, 'NumberOrString')
+}
+NumberOrString.prototype = Object.create(mongoose.SchemaType.prototype)
+
+//casts to number if possible, otherwise adds as-is. add futher validation later
+NumberOrString.prototype.cast = function (val){
+    var _val = Number(val)
+    if (isNaN(_val)){
+    _val = val
+    }
+    return _val
+}
+
+mongoose.Schema.Types.NumberOrString = NumberOrString
+
 mongoose.connect(
     "mongodb://davh:briadir32dh!@CGTest-shard-00-00-h0zai.mongodb.net:27017,cgtest-shard-00-01-h0zai.mongodb.net:27017,cgtest-shard-00-02-h0zai.mongodb.net:27017/CGTest?ssl=true&replicaSet=CGTest-shard-0&authSource=admin&retryWrites=true"
 );
@@ -15,9 +32,19 @@ db.once('open', function() {
     console.log("DB connected")
 });
 
-const schemaPathfinder = new mongoose.Schema({ data: {} })
+const schemaPathfinder = new mongoose.Schema({ 
+    data: {
+        type: Map,
+        of: NumberOrString
+    }
+})
 const Character = mongoose.model('Character',schemaPathfinder);
 // console.log(schemaPathfinder)
+
+
+
+
+
 //Socket IO
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
@@ -48,38 +75,34 @@ io
             Character.find(emitChars)
             //  console.log( 'delete '+id)
         })
+        //Only allows one level of nesting currently
         socket.on('editCharacter',function(info){
             Character.findById(info.id,function(err,doc){
                 for ( property in info.obj ) {
-                    // console.log( property ); // Outputs: foo, fiz or fiz, foo
-                    doc.data[property]=info.obj[property]
-                    console.log(doc.data[property])
+                    if(typeof info.obj[property]==='object'){
+                        for(subProperty in info.obj[property]){
+                            let subObj = doc.data.get(property)
+                            subObj[subProperty] = info.obj[property][subProperty]
+                            doc.data.set(property,subObj)
+                        }
+                    }
+                    else doc.data.set(property,info.obj[property])
+                    console.log(property, info)
 }
-                console.log(doc)
-                doc.markModified('data')
                 doc.save()
 
                 if(err){
                 console.log('Update Error!');
-            }})
-            Character.find(emitChars)
-            //  console.log( 'delete '+id)
+            }},Character.find(emitChars))
+            
         })
         
         socket.on('addCharacter', function(charInfo){
-            const newChar = new Character({
-                data: {
-                characterName: charInfo.name,
-            campaign: charInfo.campaign,
-            ruleset: charInfo.ruleset,
-            str: {
-                total: 15,
-                modifier: 1,
-                temp: 2
-            }
-        }
-    })
-        // console.log(newChar)
+            const newChar = new Character(
+                templatePathfinder
+    )
+            newChar.data.set('playerName', charInfo.name)
+        console.log(newChar.data)
         newChar.save(function(err){
             if(err){
                 console.log('Save Error!');
