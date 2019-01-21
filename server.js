@@ -72,9 +72,11 @@ io
                 if(err){
                 console.log('Delete Error!');
             }})
-            Character.find(emitChars)
+            io.emit('delChar',id)
+            // Character.find(emitChars)
             //  console.log( 'delete '+id)
         })
+        //edit
         //Only allows one level of nesting currently
         socket.on('editCharacter',function(info){
             Character.findById(info.id,function(err,doc){
@@ -93,10 +95,11 @@ io
 
                 if(err){
                 console.log('Update Error!');
-            }},Character.find(emitChars))
+            }},io.emit('editChar',info))
             
         })
-        
+
+        //add
         socket.on('addCharacter', function(charInfo){
             const newChar = new Character(
                 templatePathfinder
